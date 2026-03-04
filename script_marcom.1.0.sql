@@ -6,7 +6,7 @@
 -----------------------------------------------------------
 -- 1. ELIMINACIÓN DE TABLAS EXISTENTES (ORDEN INVERSO)
 -----------------------------------------------------------
-DROP TABLE IF EXISTS marcom.tab_contactos_adicionales;
+DROP TABLE IF EXISTS marcom.tab_contactos_adicionales; --a celso le gusta el pene duro
 DROP TABLE IF EXISTS marcom.tab_medicion_kpi;
 DROP TABLE IF EXISTS marcom.tab_prod_camp;
 DROP TABLE IF EXISTS marcom.tab_even_lead;
@@ -210,6 +210,28 @@ CREATE TABLE IF NOT EXISTS marcom.tab_segmentacion_tercero
     FOREIGN KEY(id_tercero) REFERENCES public.tab_terceros(id_tercero),
     FOREIGN KEY(id_valor)   REFERENCES marcom.tab_valores_segmentacion(id_valor)
 );
+
+-- ------------------------------------------------
+-- TABLA DE TIPOS DE CAMPAÑA
+-- Define el propósito y objetivo de cada campaña,
+-- permitiendo establecer esquemas de medición
+-- adecuados según su naturaleza.
+-- Solo modificable por el rol administrador.
+-- ------------------------------------------------
+CREATE TABLE IF NOT EXISTS marcom.tab_tipo_campana
+(
+    id_tipo_campana     DECIMAL(2,0)    NOT NULL CHECK(id_tipo_campana > 0 AND id_tipo_campana <= 99),
+    nom_tipo_campana    VARCHAR(40)     NOT NULL CHECK(LENGTH(nom_tipo_campana) >= 3),
+    des_tipo_campana    TEXT            NOT NULL,
+    ind_estado          BOOLEAN         NOT NULL, -- TRUE = activo / FALSE = inactivo
+    PRIMARY KEY(id_tipo_campana)
+);
+
+INSERT INTO marcom.tab_tipo_campana VALUES(1, 'Venta de Producto',      'Campaña orientada a generar ventas directas de productos o servicios',         TRUE);
+INSERT INTO marcom.tab_tipo_campana VALUES(2, 'Generación de Marca',    'Campaña orientada al reconocimiento y posicionamiento de la marca',             TRUE);
+INSERT INTO marcom.tab_tipo_campana VALUES(3, 'Captación de Leads',     'Campaña orientada a conseguir nuevos prospectos interesados',                   TRUE);
+INSERT INTO marcom.tab_tipo_campana VALUES(4, 'Fidelización',           'Campaña orientada a clientes existentes para generar recompra o lealtad',       TRUE);
+INSERT INTO marcom.tab_tipo_campana VALUES(5, 'Lanzamiento',            'Campaña orientada a introducir un nuevo producto o servicio al mercado',        TRUE);
 
 -- ============================================================
 -- TABLA DE CAMPAÑAS
